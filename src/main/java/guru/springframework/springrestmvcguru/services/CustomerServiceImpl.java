@@ -2,6 +2,7 @@ package guru.springframework.springrestmvcguru.services;
 
 import guru.springframework.springrestmvcguru.model.Customer;
 import org.springframework.stereotype.Service;
+import org.springframework.util.StringUtils;
 
 import java.time.LocalDateTime;
 import java.util.ArrayList;
@@ -85,6 +86,20 @@ public class CustomerServiceImpl implements CustomerService {
     @Override
     public void deleteCustomerById(UUID customerId) {
         customerMap.remove(customerId);
+    }
+
+    @Override
+    public void patchCustomerById(UUID customerId, Customer customer) {
+        Customer existingCustomer = customerMap.get(customerId);
+
+        if(StringUtils.hasText(customer.getCustomerName())) {
+            existingCustomer.setCustomerName(customer.getCustomerName());
+        }
+
+        if(customer.getVersion() != null) {
+            existingCustomer.setVersion(customer.getVersion());
+        }
+
     }
 }
 
