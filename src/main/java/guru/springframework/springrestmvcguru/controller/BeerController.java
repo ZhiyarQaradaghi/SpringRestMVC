@@ -3,6 +3,7 @@ package guru.springframework.springrestmvcguru.controller;
 import guru.springframework.springrestmvcguru.model.Beer;
 import guru.springframework.springrestmvcguru.services.BeerService;
 import lombok.AllArgsConstructor;
+import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.http.HttpHeaders;
 import org.springframework.http.HttpStatus;
@@ -14,7 +15,7 @@ import java.util.*;
 import java.util.UUID;
 
 @Slf4j
-@AllArgsConstructor // create the constructor with the BeerService beerService required ARG
+@RequiredArgsConstructor // create the constructor with the BeerService beerService required ARG
 @RestController// return back JSON body instead of @Controller html
 @RequestMapping("/api/v1/beer")
 public class BeerController {
