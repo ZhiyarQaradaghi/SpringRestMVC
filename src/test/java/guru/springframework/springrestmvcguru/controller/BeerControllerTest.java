@@ -1,5 +1,7 @@
 package guru.springframework.springrestmvcguru.controller;
 
+import com.fasterxml.jackson.core.JsonProcessingException;
+import com.fasterxml.jackson.databind.ObjectMapper;
 import guru.springframework.springrestmvcguru.model.Beer;
 import guru.springframework.springrestmvcguru.services.BeerService;
 import guru.springframework.springrestmvcguru.services.BeerServiceImpl;
@@ -32,6 +34,16 @@ class BeerControllerTest {
     BeerService beerService;
 
     BeerServiceImpl beerServiceImpl = new BeerServiceImpl();
+
+
+    @Autowired
+    ObjectMapper objectMapper;
+
+    @Test
+    void testCreateNewBeer() throws JsonProcessingException {
+        Beer beer = beerServiceImpl.listBeers().get(0);
+        System.out.println(objectMapper.writeValueAsString(beer));
+    }
 
     @Test
     void testListBeers() throws Exception {
