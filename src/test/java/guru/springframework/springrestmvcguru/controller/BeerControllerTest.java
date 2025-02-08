@@ -20,10 +20,10 @@ import java.util.UUID;
 import static org.junit.jupiter.api.Assertions.*;
 import static org.mockito.ArgumentMatchers.any;
 import static org.mockito.BDDMockito.given;
-import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.get;
-import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.post;
 
 import static org.hamcrest.core.Is.is;
+import static org.mockito.Mockito.verify;
+import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.*;
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.*;
 
 @WebMvcTest(BeerController.class) // this is a test splice - manage dependencies for only bear controller
@@ -44,6 +44,19 @@ class BeerControllerTest {
     @BeforeEach
     void setUp() {
         beerServiceImpl = new BeerServiceImpl();
+    }
+
+    @Test
+    void testUpdateBeer() throws Exception {
+        Beer beer = beerServiceImpl.listBeers().get(0);
+
+        mockMvc.perform(put("/api/v1/beer/"+beer.getId())
+                .accept(MediaType.APPLICATION_JSON)
+                .contentType(MediaType.APPLICATION_JSON)
+                .content(objectMapper.writeValueAsString(beer)))
+                .andExpect(status().isNoContent());
+
+        verify(beerService).updateBeerById(any(UUID.class), any(Beer.class));
     }
 
     @Test
