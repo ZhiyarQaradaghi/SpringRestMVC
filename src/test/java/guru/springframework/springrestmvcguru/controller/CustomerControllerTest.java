@@ -1,8 +1,10 @@
 package guru.springframework.springrestmvcguru.controller;
 
+import com.fasterxml.jackson.databind.ObjectMapper;
 import guru.springframework.springrestmvcguru.model.Customer;
 import guru.springframework.springrestmvcguru.services.CustomerService;
 import guru.springframework.springrestmvcguru.services.CustomerServiceImpl;
+import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.autoconfigure.web.servlet.WebMvcTest;
@@ -15,6 +17,8 @@ import static org.junit.jupiter.api.Assertions.*;
 import static org.mockito.ArgumentMatchers.any;
 import static org.mockito.BDDMockito.given;
 import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.get;
+
+import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.post;
 
 import static org.hamcrest.core.Is.is;
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.*;
@@ -29,6 +33,30 @@ public class CustomerControllerTest {
     CustomerService customerService;
 
     CustomerServiceImpl customerServiceImpl = new CustomerServiceImpl();
+
+    @Autowired
+    ObjectMapper objectMapper;
+
+    @BeforeEach
+    void setUp() {
+        customerServiceImpl = new CustomerServiceImpl();
+    }
+
+    @Test
+    void testCreateNewCustomer() throws Exception {
+        Customer customer = customerServiceImpl.findAll().get(0);
+        customer.setId(null);
+        customer.setVersion(null);
+
+        given(customerService.saveNewCustomer(any(Customer.class))).willReturn(customerServiceImpl.findAll().get(1));
+
+        mockMvc.perform(post("/api/v1/customer")
+                .accept(MediaType.APPLICATION_JSON)
+                .contentType(MediaType.APPLICATION_JSON)
+                .content(objectMapper.writeValueAsString(customer)))
+                .andExpect(status().isCreated())
+                .andExpect(header().exists("Location"));
+    }
 
 
     @Test
