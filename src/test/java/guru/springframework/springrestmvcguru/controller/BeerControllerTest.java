@@ -67,7 +67,7 @@ class BeerControllerTest {
         Map<String, Object> beerMap = new HashMap<>();
         beerMap.put("beerName", "New Name");
 
-        mockMvc.perform(patch("/api/v1/beer/"+beer.getId())
+        mockMvc.perform(patch(BeerController.BEER_PATH_ID, beer.getId())
                 .contentType(MediaType.APPLICATION_JSON)
                 .accept(MediaType.APPLICATION_JSON)
                 .content(objectMapper.writeValueAsString(beerMap)))
@@ -113,7 +113,7 @@ class BeerControllerTest {
 
         given(beerService.saveNewBeer(any(Beer.class))).willReturn(beerServiceImpl.listBeers().get(1));
 
-        mockMvc.perform(post("/api/v1/beer")
+        mockMvc.perform(post(BeerController.BEER_PATH)
                 .accept(MediaType.APPLICATION_JSON)
                     .contentType(MediaType.APPLICATION_JSON)
                         .content(objectMapper.writeValueAsString(beer)))

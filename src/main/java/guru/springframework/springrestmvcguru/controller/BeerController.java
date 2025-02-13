@@ -21,8 +21,11 @@ import java.util.UUID;
 public class BeerController {
     private final BeerService beerService;
 
+    public static final String BEER_PATH = "/api/v1/beer";
+    public static final String BEER_PATH_ID = BEER_PATH + "/{beerId}";
 
-    @PatchMapping("{beerId}")
+
+    @PatchMapping(BEER_PATH_ID)
     public ResponseEntity updateBeerPatchById(@PathVariable("beerId") UUID beerId, @RequestBody Beer beer) {
 
         beerService.patchBeerById(beerId, beer);
@@ -30,7 +33,7 @@ public class BeerController {
         return new ResponseEntity(HttpStatus.NO_CONTENT);
     }
 
-    @DeleteMapping("{beerId}")
+    @DeleteMapping(BEER_PATH_ID)
     public ResponseEntity deleteById(@PathVariable("beerId") UUID beerId) {
 
         beerService.deleteById(beerId);
@@ -39,7 +42,7 @@ public class BeerController {
         return new ResponseEntity(HttpStatus.NO_CONTENT);
     }
 
-    @PutMapping("{beerId}")
+    @PutMapping(BEER_PATH_ID)
     public ResponseEntity updateById(@PathVariable("beerId") UUID beerId, @RequestBody Beer beer) {
         beerService.updateBeerById(beerId, beer);
 
@@ -53,7 +56,7 @@ public class BeerController {
         Beer savedBeer = beerService.saveNewBeer(beer);
 
         HttpHeaders headers = new HttpHeaders();
-        headers.add("Location", "api/v1/bear/" + savedBeer.getId().toString()); // adds the location of this beer property to the header
+        headers.add("Location", BEER_PATH + "/" + savedBeer.getId().toString()); // adds the location of this beer property to the header
 
         return new ResponseEntity(headers, HttpStatus.CREATED);
     }
@@ -63,7 +66,7 @@ public class BeerController {
         return beerService.listBeers();
     }
 
-    @RequestMapping(value = "{beerId}", method = RequestMethod.GET)
+    @RequestMapping(value = BEER_PATH_ID, method = RequestMethod.GET)
     public Beer getBeerById(@PathVariable("beerId") UUID beerId) {
         log.info("Getting beer by id - in controller -1234 asdf");
 
